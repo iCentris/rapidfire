@@ -1,5 +1,5 @@
 <div class="survey-attempt-form">
-<h2><%= survey.new_record? ? "New Survey" : "Edit Survey" %></h2>
+<h2><%= survey.new_record? ? "New Survey" : "Edit Survey" %><%= link_to "surveys".cms, surveys_path, class: "btn btn-primary"%></h2>
   <%= form_for survey do |f| %>
     <%- if survey.errors.any? %>
       <ul class="valid-errors text-center">
@@ -23,3 +23,8 @@
     </div>
   <% end %>
 </div>
+<style type="text/css">
+  .survey-attempt-form h2 a{
+    float: right;
+  }
+</style>

@@ -12,6 +12,8 @@
         <%= f.fields_for("#{answer.question.id}", answer) do |answer_form| %>
           <div id="survey_<%= @survey.id %>_<%= answer.question.id %>" style="<%= i == 0 ? '' : 'display: none'; %>">
             <%= render_answer_form_helper(answer, answer_form, { counter: i + 1 }) %>
+            <input type="hidden" id='q_<%= answer.question.id %>_rules' value='<%= answer.question.validation_rules.to_json %>' />
+            <input type="hidden" id='q_<%= answer.question.id %>_type' value='<%= answer.question.type %>' />
           </div>
         <% end %>
       <% end %>

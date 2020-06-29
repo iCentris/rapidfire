@@ -11,12 +11,12 @@
     </td>
     <td>
       <ul class="horizontal-list">
-        <li><%= link_to "Answer Questions", new_survey_attempt_path(survey), class: "btn btn-default" %></li>
         <% if can_administer? %>
           <li><%= link_to "Results", [:results, survey], class: "btn btn-default" %></li>
           <li><%= link_to "Delete", survey, method: :delete, class: "btn btn-default" %></li>
           <li><%= link_to "Export", export_survey_path(survey), class: "btn btn-default" %></li>
         <% else %>
+          <li><%= link_to "Answer Questions", new_survey_attempt_path(survey), class: "btn btn-default" %></li>
           <li><%= link_to "view", survey_attempt_path(id: recent_attempt.id, survey_id: survey.id), class: "btn btn-default" %></li>
         <% end %>
       </ul>

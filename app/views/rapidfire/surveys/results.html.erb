@@ -1,5 +1,5 @@
 <div class="survey-attempt-form">
-  <h2>Results</h2>
+  <h2>Results<%= link_to "surveys".cms, surveys_path, class: "btn btn-primary"%></h2>
   <%- @survey_results.each do |result| %>
     <div>
       <h4 style="margin-bottom: 0;padding-left: 15px;"><%= result.question.question_text %></h4>
@@ -33,3 +33,8 @@
     </div>
   <% end %>
 </div>
+<style type="text/css">
+  .survey-attempt-form h2 a{
+    float: right;
+  }
+</style>

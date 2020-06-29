@@ -1,5 +1,5 @@
 <div class="survey-attempt-form">
-  <h2>Question</h2>
+  <h2>Question<%= link_to "back_to_survey".cms, survey_questions_path(@survey), class: "btn btn-primary"%></h2>
   <%= form_for form, as: :question, url: url, method: method do |f| %>
     <%- unless form.errors.empty? %>
       <ul>
@@ -72,3 +72,8 @@
     </div>
   <% end %>
 </div>
+<style type="text/css">
+  .survey-attempt-form h2 a{
+    float: right;
+  }
+</style>
