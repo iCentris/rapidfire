@@ -5,5 +5,12 @@
 %>
 <div class="form-group">
   <%= f.label :answer_text, "#{counter}. #{answer.question.question_text}" %>
-  <%= f.text_field :answer_text %>
+  <%= f.text_field :answer_text, class: "date_picker"  %>
+  
 </div>
+
+<script type="text/javascript">
+  <% page_js do %>
+    $(".date_picker").datetimepicker({ format: "MM/DD/YYYY",showClose: true, locale: "en", focusOnShow: false });
+  <% end %>
+ </script>

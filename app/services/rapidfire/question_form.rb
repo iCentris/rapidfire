@@ -11,9 +11,20 @@ module Rapidfire
        Rapidfire::Questions::Short,
       ]
 
+    questions_with_names_hash =
+      {
+        "Rapidfire::Questions::Checkbox" => "checkbox".cms,
+        "Rapidfire::Questions::Date" => "date".cms,
+        "Rapidfire::Questions::Long" => "long_text".cms,
+        "Rapidfire::Questions::Numeric" => "numeric".cms,
+        "Rapidfire::Questions::Radio" => "options".cms,
+        "Rapidfire::Questions::Select" => "dropdown".cms,
+        "Rapidfire::Questions::Short" => "short_text".cms,
+      }
+
     QUESTION_TYPES = AVAILABLE_QUESTIONS.inject({}) do |result, question|
       question_name = question.to_s.split("::").last
-      result[question_name] = question.to_s
+      result[questions_with_names_hash[question.to_s]] = question.to_s
       result
     end
 

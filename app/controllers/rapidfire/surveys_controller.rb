@@ -61,6 +61,34 @@ module Rapidfire
         format.json { render json: @survey_results, root: false }
         format.html
         format.js
+        format.csv {
+          questions = @survey.questions
+          question_ids = questions.pluck(:id)
+          attempts = @survey.attempts
+          headers = ["Consultant"]
+          questions.each do |q|
+            headers << q.question_text
+          end
+          export_csv = CSV.generate(headers: true) do |csv|
+            csv << headers
+            attempts.find_each(batch_size: 100) do |attempt|
+              
+            answers_hash = {}
+            attempt.answers.each do |answer|
+              answers_hash[answer.question_id] = answer.answer_text
+            end
+              record = [attempt.user.consultant_id || attempt.user.display_name]
+              question_ids.each do |question_id|
+                record << answers_hash[question_id]
+              end
+              csv << record
+            end
+          end
+          send_data export_csv, 
+              type: 'text/csv',
+              disposition: 'attachment',
+              filename: "#{@survey.name}-results-#{Time.now.strftime('%m/%d/%Y')}.csv"
+        }
       end
     end
 
