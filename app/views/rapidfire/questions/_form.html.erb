@@ -2,7 +2,7 @@
   <h2>Question<%= link_to "back_to_survey".cms, survey_questions_path(@survey), class: "btn btn-primary"%></h2>
   <%= form_for form, as: :question, url: url, method: method do |f| %>
     <%- unless form.errors.empty? %>
-      <ul>
+      <ul class="error-messages">
         <%- form.errors.full_messages.each do |message| %>
           <li><%= message %></li>
         <% end %>
@@ -43,7 +43,7 @@
       <hr/>
 
     <div class="form-group" id="answer_presence_div">
-      <label for="question_answer_options"><%= "is_mandatory".cms{"Is this mandatory?"} %></label>
+      <label for="question_answer_options" class="mandatory-label"><%= "is_mandatory".cms{"Is this mandatory?"} %></label>
       <%= f.check_box :answer_presence %>
     </div>
 
