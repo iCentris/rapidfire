@@ -11,7 +11,7 @@
     <td>
       <ul class="horizontal-list">
         <% if can_administer? %>
-          <li><%= link_to "Results", [:results, survey], class: "btn btn-default" %></li>
+          <li><%= link_to "Results", [:results, survey], class: "btn btn-default no-spinner" %></li>
           <li><%= link_to "Delete", survey, method: :delete, class: "btn btn-default" %></li>
           <li><%= link_to "Export", export_survey_path(survey), class: "btn btn-default" %></li>
         <% else %>
@@ -24,3 +24,13 @@
     </td>
   </tr>
 </div>
+
+<script type="text/javascript">
+  <% page_js do %>
+    $(".no-spinner").click(function() {
+      setTimeout(function() {
+        $("#spinner-container").remove();
+      }, 2000);
+    });
+  <% end %>
+</script>
