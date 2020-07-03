@@ -19,17 +19,17 @@
       <%= f.text_field :question_text %>
     </div>
 
-    <div class="form-group">
+    <div class="form-group" id="position_div">
       <%= f.label :position %>
       <%= f.number_field :position %>
     </div>
 
-    <div class="form-group">
+    <div class="form-group" id="placeholder_div">
       <%= f.label :placeholder %>
       <%= f.text_field :placeholder %>
     </div>
 
-    <div class="form-group">
+    <div class="form-group" id="default_text_div">
       <%= f.label :default_text %>
       <%= f.text_field :default_text %>
     </div>
@@ -79,23 +79,37 @@
 </style>
 <script type="text/javascript">
   function change_question_type(val) {
+    $("#default_text_div").hide();
     switch(val) {
       case "Rapidfire::Questions::Date":
         $("#answer_minimum_length_div").hide();
         $("#answer_maximum_length_div").hide();
         $("#answer_greater_than_or_equal_to_div").hide();
-        $("#question_answer_greater_than_or_equal_to").val('');
-        $("#question_answer_greater_than_or_equal_to").val('');
         $("#answer_less_than_or_equal_to_div").hide();
         $("#answer_options_div").hide();
         $("#question_placeholder").val('MM/dd/yyyy');
+        // $("#default_text_div").show();
+        $("#placeholder_div").hide();
+
+        $("#question_answer_greater_than_or_equal_to").val('');
+        $("#question_answer_less_than_or_equal_to").val('');
+        $("#question_answer_maximum_length").val('');
+        $("#question_answer_minimum_length").val('');
+        $("#question_answer_options").val('');
+        $("#question_placeholder").val('');
         break;
       case "Rapidfire::Questions::Long":
         $("#answer_minimum_length_div").show();
         $("#answer_maximum_length_div").show();
         $("#answer_greater_than_or_equal_to_div").hide();
         $("#answer_less_than_or_equal_to_div").hide();
+        $("#placeholder_div").show();
+        // $("#default_text_div").show();
         $("#answer_options_div").hide();
+
+        $("#question_answer_greater_than_or_equal_to").val('');
+        $("#question_answer_less_than_or_equal_to").val('');
+        $("#question_answer_options").val('');
         break;
       case "Rapidfire::Questions::Checkbox":
         $("#answer_minimum_length_div").hide();
@@ -103,6 +117,14 @@
         $("#answer_greater_than_or_equal_to_div").hide();
         $("#answer_less_than_or_equal_to_div").hide();
         $("#answer_options_div").show();
+        $("#placeholder_div").hide();
+
+        $("#question_answer_greater_than_or_equal_to").val('');
+        $("#question_answer_less_than_or_equal_to").val('');
+        $("#question_answer_maximum_length").val('');
+        $("#question_answer_minimum_length").val('');
+        $("#question_placeholder").val('');
+        // $("#default_text_div").hide();
         break;
       case "Rapidfire::Questions::Numeric":
         $("#answer_minimum_length_div").hide();
@@ -110,6 +132,13 @@
         $("#answer_greater_than_or_equal_to_div").show();
         $("#answer_less_than_or_equal_to_div").show();
         $("#answer_options_div").hide();
+        $("#placeholder_div").hide();
+        // $("#default_text_div").hide();
+
+        $("#question_answer_maximum_length").val('');
+        $("#question_answer_minimum_length").val('');
+        $("#question_answer_options").val('');
+        $("#question_placeholder").val('');
         break;
       case "Rapidfire::Questions::Radio":
         $("#answer_minimum_length_div").hide();
@@ -117,6 +146,14 @@
         $("#answer_greater_than_or_equal_to_div").hide();
         $("#answer_less_than_or_equal_to_div").hide();
         $("#answer_options_div").show();
+        $("#placeholder_div").hide();
+        // $("#default_text_div").hide();
+
+        $("#question_answer_greater_than_or_equal_to").val('');
+        $("#question_answer_less_than_or_equal_to").val('');
+        $("#question_answer_maximum_length").val('');
+        $("#question_answer_minimum_length").val('');
+        $("#question_placeholder").val('');
         break;
       case "Rapidfire::Questions::Select":
         $("#answer_minimum_length_div").hide();
@@ -124,6 +161,14 @@
         $("#answer_greater_than_or_equal_to_div").hide();
         $("#answer_less_than_or_equal_to_div").hide();
         $("#answer_options_div").show();
+        $("#placeholder_div").hide();
+        // $("#default_text_div").hide();
+
+        $("#question_answer_greater_than_or_equal_to").val('');
+        $("#question_answer_less_than_or_equal_to").val('');
+        $("#question_answer_maximum_length").val('');
+        $("#question_answer_minimum_length").val('');
+        $("#question_placeholder").val('');
         break;
       case "Rapidfire::Questions::Short":
         $("#answer_minimum_length_div").show();
@@ -131,6 +176,12 @@
         $("#answer_greater_than_or_equal_to_div").hide();
         $("#answer_less_than_or_equal_to_div").hide();
         $("#answer_options_div").hide();
+        $("#placeholder_div").show();
+        // $("#default_text_div").show();
+
+        $("#question_answer_greater_than_or_equal_to").val('');
+        $("#question_answer_less_than_or_equal_to").val('');
+        $("#question_answer_options").val('');
         break;
       default:
         console.log('nothing selected');
