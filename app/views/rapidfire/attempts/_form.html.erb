@@ -10,16 +10,19 @@
     <%= form_for([@survey, @attempt_builder], data: {remote: remote}, url: rapidfire.survey_attempts_path(@survey, @attempt_builder)) do |f| %>
       <%- @attempt_builder.answers.each_with_index do |answer, i| %>
         <%= f.fields_for("#{answer.question.id}", answer) do |answer_form| %>
-          <div id="survey_<%= @survey.id %>_<%= answer.question.id %>" style="<%= i == 0 ? '' : 'display: none'; %>">
+          <div id="survey_<%= @survey.id %>_<%= i %>" style="<%= i == 0 ? '' : 'display: none'; %>">
             <%= render_answer_form_helper(answer, answer_form, { counter: i + 1 }) %>
-            <input type="hidden" id='q_<%= answer.question.id %>_rules' value='<%= answer.question.validation_rules.to_json %>' />
-            <input type="hidden" id='q_<%= answer.question.id %>_type' value='<%= answer.question.type %>' />
+            <div class="pull-left">
+              <%= link_to "previous".cms, "javascript:void(0);", class: "btn btn-primary survey-question-previous", data: { index: i, q_id: answer.question.id }, style: "#{i == 0 ? 'display: none' : ''}" %>
+            </div>
+            <div class="pull-right">
+              <%= link_to "next".cms, "javascript:void(0);", class: "btn btn-primary survey-question-next", data: { index: i, q_id: answer.question.id, rules: answer.question.validation_rules.to_json, type: answer.question.type} %>
+            </div>
           </div>
         <% end %>
       <% end %>
       <div class="pull-right">
-        <%= f.submit submit_text, class: "btn btn-default", id: "survey_attempt_form_#{@survey.id}", style: "#{number_of_questions == 1 ? '' : 'display: none'}" %>
-        <%= link_to "next".cms, "javascript:void(0);", class: "btn btn-primary survey-question-next", data: { next: @attempt_builder.answers.first.question.id }, style: "#{number_of_questions == 1 ? 'display: none' : ''}" %>
+        <%= f.submit submit_text, class: "btn btn-default", id: "survey_attempt_form_#{@survey.id}", style: "display: none" %>
         <%= link_to "remind_me_later".cms, "##{modal_id}", class: "btn btn-primary", data: { toggle: :modal } if remind_me_later %>
       </div>
     <% end %>
@@ -27,7 +30,7 @@
 <% else %>
   <div class="survey-attempt-form">
     <h2><%= t('rapidfire.attempts.header') -%></h2>
-    <p class="survey-title"><%= @survey.introduction %></p>
+    <p class="survey-title"><%= @survey.cms_introduction %></p>
 
     <%= form_for([@survey, @attempt_builder], data: {remote: remote}, url: rapidfire.survey_attempts_path(@survey, @attempt_builder)) do |f| %>
       <%- @attempt_builder.answers.each_with_index do |answer, i| %>
