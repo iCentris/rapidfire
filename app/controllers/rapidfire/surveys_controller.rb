@@ -77,8 +77,10 @@ module Rapidfire
             attempt.answers.each do |answer|
               answers_hash[answer.question_id] = answer.answer_text
             end
-              user_consultant_id = attempt.user.consultant_id.present? ? "ID#{attempt.user.consultant_id}" : attempt.user.display_name 
-              record = [user_consultant_id]
+              user = attempt.user
+              user_consultant_id = user.consultant_id.present? ? "ID#{user.consultant_id}" : user.display_name 
+              user_info = "#{user_consultant_id}, #{user.display_name}, #{user.email}, #{attempt.created_at.strftime("%B %d, %Y %H:%M:%S")}"
+              record = [user_info]
               question_ids.each do |question_id|
                 record << answers_hash[question_id]
               end
