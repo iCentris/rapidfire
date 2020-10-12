@@ -24,7 +24,15 @@ module Rapidfire
         else
           error_message = 'survey_incomplete_message'.cms {'Please fill the Survey.'}
           format.js {render js: "toastr.error('#{error_message}');"}
-          format.json { render json: {error_message: error_message}.to_json, status: :unprocessable_entity }
+          format.json do
+            errors = {}
+            @attempt_builder.answers.each do |answer|
+              msg = answer.errors.try(:[], :answer_text).try(:first)
+              next if msg.blank?
+              errors["#{answer.question_id}"] = msg
+            end
+            render json: {errors: errors}, status: :unprocessable_entity
+          end
           format.html { render :new }
         end
       end
