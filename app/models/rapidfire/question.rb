@@ -33,9 +33,8 @@ module Rapidfire
     # answer will delegate its validation to question, and question
     # will inturn add validations on answer on the fly!
     def validate_answer(answer)
-      if rules[:presence] == "1"
-        answer.validates_presence_of :answer_text
-      end
+      return if rules[:presence] == "0"
+      answer.validates_presence_of :answer_text
 
       if rules[:minimum].present? || rules[:maximum].present?
         min_max = { minimum: rules[:minimum].to_i }
