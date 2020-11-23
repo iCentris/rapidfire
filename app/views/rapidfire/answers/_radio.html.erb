@@ -5,7 +5,7 @@
 %>
 
 <div class="form-group check-box">
-  <%= f.label :answer_text, "#{counter}. #{answer.question.question_text}" %>
+  <%= f.label :answer_text, "#{counter}. #{answer.question.cms_question_text}" %>
   <%- answer.question.options.each_with_index do |option, index| %>
     <span class="form-group sub">
       <%= f.label "answer_text_#{index}" do %>

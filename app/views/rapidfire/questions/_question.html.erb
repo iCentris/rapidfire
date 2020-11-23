@@ -3,6 +3,10 @@
 	  <td><%= question.question_text %></td>
 	  <td>
 	    <ul class="horizontal-list">
+        <li><%= link_to "cms".cms,
+                      main_app.show_cms_instance_keys_path(question.class.to_s, question.id),
+                      class: "btn btn-default",
+                      target: "_blank" %></li>
 	      <li><%= link_to "Edit", [:edit, question.survey, question], :class => "btn btn-default" %></li>
 	      <li><%= link_to "Delete", [question.survey, question], method: :delete, :class => "btn btn-default" %></li>
 	    </ul>

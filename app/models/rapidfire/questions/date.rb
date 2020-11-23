@@ -1,6 +1,9 @@
 module Rapidfire
   module Questions
     class Date < Rapidfire::Question
+      include Cms::CmsInstanceKeys
+      sub_key :question_text
+
       def validate_answer(answer)
         super(answer)
 
