@@ -38,7 +38,9 @@
           <%= render_answer_form_helper(answer, answer_form, { counter: i + 1 }) %>
         <% end %>
       <% end %>
-      <%= f.submit submit_text,  :class => 'btn btn-default' %>
+      <div class="pull-right">
+        <%= f.submit submit_text,  :class => 'btn btn-default' %>
+      </div>
     <% end %>
   </div>
 <% end %>

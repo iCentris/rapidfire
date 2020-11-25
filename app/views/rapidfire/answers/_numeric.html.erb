@@ -4,6 +4,6 @@
   counter = options[:counter]
 %>
 <div class="form-group">
-  <%= f.label :answer_text, "#{counter}. #{answer.question.question_text}" %>
+  <%= f.label :answer_text, "#{counter}. #{answer.question.cms_question_text}" %>
   <%= f.text_field :answer_text, class: 'number' %>
 </div>

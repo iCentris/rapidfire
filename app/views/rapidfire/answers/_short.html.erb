@@ -5,6 +5,6 @@
 %>
 
 <div class="form-group">
-  <%= f.label :answer_text, "#{counter}. #{answer.question.question_text}" %>
+  <%= f.label :answer_text, "#{counter}. #{answer.question.cms_question_text}" %>
   <%= f.text_field :answer_text, value: answer.answer_text || answer.question.default_text, placeholder: answer.question.placeholder %>
 </div>
