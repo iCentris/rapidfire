@@ -1,39 +1,137 @@
-<div class="survey-attempt-form">
-  <h2>Results<%= link_to "surveys".cms, surveys_path, class: "btn btn-primary"%></h2>
-  <%- @survey_results.each do |result| %>
-    <div>
-      <h4 style="margin-bottom: 0;padding-left: 15px;"><%= result.question.question_text %></h4>
-        <%- if result.results.is_a?(Array) %>
-          <ol style="margin: 0 15px;">
-            <%- result.results.each do |answer| %>
-              <li><%= answer %></li>
-            <% end %>
-          </ol>
-        <% elsif result.results.is_a?(Hash) %>
-        <div class="table-responsive" style="padding-top: 0;">
-          <table class="table table-striped" style="margin-bottom: 0;">
-            <thead>
-              <tr>
-                <th>Option</th>
-                <th>Count</th>
-              </tr>
-            </thead>
-            <tbody>
-              <%- result.results.each do |option, count| %>
-                <tr>
-                  <td><%= option %></td>
-                  <td><%= count %></td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        </div>
-        <% end %>
+<%= javascript_include_tag "chartkick" %>
+<%= javascript_include_tag "Chart.bundle.js" %>
+<% 
+  color_palette = ['#3366cc', '#dc3912', '#ff9900', '#109618', '#990099', '#0099c6', '#dd4477', 
+    '#66aa00', '#b82e2e', '#316395', '#3366cc', '#994499', '#22aa99', '#aaaa11', 
+    '#6633cc', '#e67300', '#8b0707', '#651067', '#329262', '#5574a6', '#3b3eac', 
+    '#b77322', '#16d620', '#b91383', '#f4359e', '#9c5935', '#a9c413', '#2a778d', 
+    '#668d1c', '#bea413', '#0c5922', '#743411']
+  Chartkick.options = {
+    height: "200px",
+    colors: color_palette
+  } 
+%>
+
+<%= form_tag results_survey_path, method: :get do %>
+  <div class="row survey-filters">
+    <span class='heading'> Results</span>
+    <div class="pull-right" style='display: inline; '>
+      <% label= "filter_by".cms %>
+      <span class="filter">
+        <label><%= "market".cms %></label>
+        <%
+          locals = {
+            id: "market_filter",
+            prompt: "all".cms,
+            collection: (Cms::Market.client_markets.order(:name).map { |m| [m.id, m.name] }),
+            button_classes: "btn btn-default btn-sm filter",
+            selected: params[:market_filter].present? ? params[:market_filter] : nil
+          }
+        %>
+        <%= render partial: "components/button_drop_down", locals: locals %>
+      </span>
+      <label><%= "date_from".cms %></label>
+      <div class="input-group date datetime_picker date-filters"><input class="string datetime_picker optional form-control" type="text" data-date-format="MM/DD/YYYY" data-date-language="en" data-date-data-date-weekstart="0" name="attempt_from" id="attempt_from"><span class="input-group-btn datepickerbutton"><button class="btn btn-default" type="button"><span class="ic-icon-regular ic-icon-calendar" data-time-icon="ic-icon-regular ic-icon-clock" data-date-icon="ic-icon-regular ic-icon-calendar"></span></button></span></div>
+      <label><%= "to".cms %></label>
+      <div class="input-group date datetime_picker date-filters"><input class="string datetime_picker optional form-control" type="text" data-date-format="MM/DD/YYYY" data-date-language="en" data-date-data-date-weekstart="0" name="attempt_to" id="attempt_to"><span class="input-group-btn datepickerbutton"><button class="btn btn-default" type="button"><span class="ic-icon-regular ic-icon-calendar" data-time-icon="ic-icon-regular ic-icon-clock" data-date-icon="ic-icon-regular ic-icon-calendar"></span></button></span></div>
+      <%= button_tag  "search" %>&nbsp;&nbsp;
+      <%= link_to "CSV".cms, "/rapidfire/surveys/#{params[:id]}/results.csv", class: "btn btn-primary"%>&nbsp;&nbsp;
+      <%= link_to "surveys".cms, surveys_path, class: "btn btn-primary pull-right"%>
     </div>
+  </div>
+<% end %>
+
+
+<div class="survey-attempt-form">
+  <% if @survey_results.any? %>
+    <%- @survey_results.keys.each do |question_id| %>
+      <% 
+        question = @survey_results[question_id] 
+        answers = question[:answers] 
+      %>
+      <div class='question-row'>
+        <h4 style="margin-bottom: 0;padding-left: 15px;"><%= question['question'] %></h4>
+          <%- if answers.is_a?(Array) %>
+            <ol style="margin: 0 15px;">
+              <%- answers.each do |answer| %>
+                <li><div class="author-quotes">“<%= answer[:answer] %>”<span class="quote-author-name">– <%= answer[:user] %></span></div></li>
+              <% end %>
+            </ol>
+          <% elsif answers.is_a?(Hash) %>
+            <% pie_data = {} %>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="table-responsive" style="padding-top: 0;">
+                  <table class="table table-striped" style="margin-bottom: 0;">
+                    <thead>
+                      <tr>
+                        <th>Option</th>
+                        <th>Count</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <%- answers.values.each_with_index do |answer, i| %>
+                        <% pie_data[answer[:answer]] = answer[:count] %>
+                        <tr style="color:<%= color_palette[i] %>">
+                          <td><%= answer[:answer] %></td>
+                          <td><a class='users_list' data-users='<%= answer[:users].join(",")%>'><%= answer[:count] %></a></td>
+                        </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <%= pie_chart(pie_data) %>
+              </div>
+            </div>
+          <% end %>
+      </div>
+    <% end %>
   <% end %>
 </div>
+
+<%= modal id: "answered-users-modal", title: "users".cms do %>
+  <div id='answered-users-modal-div'></div>
+<% end %>
+<script type="text/javascript">
+  <%page_js do %>
+    $(".users_list").click(function(){
+      var users = $(this).attr('data-users');
+      var users_list = users.split(',').join('<br\>');
+      $('#answered-users-modal-div').empty().html(users_list);
+      $('#answered-users-modal').modal('show');         
+    });
+  <% end %>
+</script>
+
+
 <style type="text/css">
   .survey-attempt-form h2 a{
     float: right;
+  }
+  .question-row {
+    margin-bottom: 10px;
+    width: 70%;
+    border: 1px solid lightgrey;
+    padding-bottom: 10px;
+  }
+  span.quote-author-name {
+    text-align: right;
+    font-weight: 700;
+    display: block;
+    color: black;
+  }
+  .date-filters {
+    width: 200px;
+    vertical-align: middle;
+  }
+
+  .survey-filters{
+    margin: 10px 0px;
+  }
+
+  .heading {
+    font-size: 25px;
   }
 </style>

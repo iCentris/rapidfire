@@ -3,7 +3,8 @@ Rapidfire::Engine.routes.draw do
 
     member do
       get "export" 
-      get 'results', defaults: { format: :csv }
+      get 'results'
+      get 'answered_users'
     end
     collection do 
       get "export"
