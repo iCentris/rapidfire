@@ -1,0 +1,9 @@
+<% 
+  users_list = ''
+  @users.each do |u| 
+  	users_list = "#{users_list} #{u.consultant_id || u.username} <br/>"
+  end 
+%>
+$('#answered-users-modal-div').empty().html('<%= users_list.html_safe %>');
+$('#answered-users-modal').modal('show');
+console.log('<%= users_list %>');
