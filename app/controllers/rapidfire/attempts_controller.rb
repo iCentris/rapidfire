@@ -18,6 +18,7 @@ module Rapidfire
 
       respond_to do |format|
         if @attempt_builder.save
+          @attempted_survey.update_attribute(:active, 0) if @attempted_survey
           format.js { render "rapidfire/attempts/success" }
           format.json { render json: {}, status: :ok }
           format.html { redirect_to after_answer_path_for }
@@ -62,11 +63,12 @@ module Rapidfire
     private
 
     def check_resubmit_availability
-      attempted_survey = Rapidfire::Attempt.where(user_id: current_user.id, survey_id: params[:survey_id]).last
-      if attempted_survey.present?
+      @attempted_survey = Rapidfire::Attempt.where(user_id: current_user.id, survey_id: params[:survey_id], active: 1).last
+      if @attempted_survey.present?
         if PyrCore::AppSetting.enable_survey_resubmission != "true"
           respond_to do |format|
             format.js { render "rapidfire/attempts/submitted" }
+            format.json { render json: { error: "survey_taken".cms {"Survey already taken."} }, status: :unprocessable_entity }
           end
         end
       end

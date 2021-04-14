@@ -51,7 +51,7 @@ module Rapidfire
         self.survey = @attempt.survey
         self.questions = @survey.questions
       else
-        @attempt = Attempt.new(user: user, survey: survey)
+        @attempt = Attempt.new(user: user, survey: survey, active: 1)
         @answers = @survey.questions.collect do |question|
           @attempt.answers.build(question_id: question.id)
         end
