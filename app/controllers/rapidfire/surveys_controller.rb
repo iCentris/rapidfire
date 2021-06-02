@@ -136,7 +136,7 @@ module Rapidfire
           @survey_results = SurveyResults.new(survey: @survey).extract
           questions = @survey.questions
           question_ids = questions.pluck(:id)
-          attempts = @survey.attempts
+          attempts = @survey.attempts.active
           headers = ["Consultant"]
           questions.each do |q|
             headers << q.question_text
