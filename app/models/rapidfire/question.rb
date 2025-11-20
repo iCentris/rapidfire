@@ -1,5 +1,5 @@
 module Rapidfire
-  class Question < ActiveRecord::Base
+  class Question < ApplicationRecord
     belongs_to :survey, :inverse_of => :questions
     has_many   :answers
 
@@ -7,10 +7,6 @@ module Rapidfire
 
     validates :survey, :question_text, :presence => true
     serialize :validation_rules
-
-    if Rails::VERSION::MAJOR == 3
-      attr_accessible :survey, :question_text, :position, :default_text, :placeholder, :validation_rules, :answer_options
-    end
 
     def self.inherited(child)
       child.instance_eval do
